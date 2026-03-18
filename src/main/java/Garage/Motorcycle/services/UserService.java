@@ -24,11 +24,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    //adding jwt
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtService jwtService){
         this.userRepository=userRepository;
         this.userMapper=userMapper;
         this.passwordEncoder=passwordEncoder;
+        this.jwtService=jwtService;
     }
 
     public String addUser(@Valid UserRequest user) {
