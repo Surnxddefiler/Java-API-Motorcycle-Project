@@ -53,7 +53,7 @@ public class UserService {
         if (!passwordEncoder.matches(loginRequest.password(), users.getPassword())){
             throw new WrongPassword();
         }
-        return "Logged";
+        return jwtService.generateToken(loginRequest.email());
                     }
     public String deleteUser(Long userId){
         UsersEntity user=userRepository.findById(userId).orElseThrow(()->new UserNotFoundException());

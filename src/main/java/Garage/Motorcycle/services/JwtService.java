@@ -28,28 +28,25 @@ import java.util.*;
 
 @Service
 public class JwtService {
-    //secret key for generating jwt token (key is in .env)
-    @Value("${JWT_SECRET}")
+    //secret key for generating jwt token env variable
+    @Value("${jwt.secret}")
     private String secretKey;
 
     public String generateToken(String email){
         //creating claims
         Map<String, Object> claims=new HashMap<>();
-
         //returning jwt token
         return Jwts.builder()
                 .claims(claims) //claims we use for an additional info for token, for example: claims.put("role", "USER"); claims.put("id", 5);
                 .subject(email)//the main identifier of user
                 .issuedAt(new Date(System.currentTimeMillis())) //start time
-                .expiration(new Date(System.currentTimeMillis()+60*60*30)) //end time
+                .expiration(new Date(System.currentTimeMillis()+1000*60*30)) //end time
                 .signWith(getKey())//sign with a secret key
                 .compact();// compile it all
     }
 
     private Key getKey() {
-//        to Bytes
-        byte[] bytes= Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(bytes);
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
     }
 
 }
