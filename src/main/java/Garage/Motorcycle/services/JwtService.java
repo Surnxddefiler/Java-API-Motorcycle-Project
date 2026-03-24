@@ -72,7 +72,18 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        return true;
+    //validating token
+    public boolean validateToken(String token, UserDetails userDetails){
+        //extracting email
+        final String email=decodeEmail(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    //checking if token is expired
+    private boolean isTokenExpired(String token){
+      return extractExperationDate(token).before(new Date());
+    };
+    //getting experation date
+    private Date extractExperationDate(String token){
+        return extractClaims(token, Claims::getExpiration);
     }
 }

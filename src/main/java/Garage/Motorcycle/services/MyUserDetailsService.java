@@ -3,13 +3,13 @@ package Garage.Motorcycle.services;
 import Garage.Motorcycle.customExeptions.UserNotFoundException;
 import Garage.Motorcycle.db.UserRepository;
 import Garage.Motorcycle.db.UsersEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class MyUserDetailsService implements UserDetailsService {
 
     //getting userRepository
