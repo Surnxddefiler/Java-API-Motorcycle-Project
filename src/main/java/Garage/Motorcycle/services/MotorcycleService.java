@@ -13,6 +13,7 @@ import Garage.Motorcycle.db.MotorcycleRepository;
 import Garage.Motorcycle.db.UserRepository;
 import Garage.Motorcycle.db.UsersEntity;
 import Garage.Motorcycle.domain.MotorcycleFilters;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -32,40 +33,40 @@ public class MotorcycleService {
         this.userRepository=userRepository;
     }
     //getting all Motocycles
-    public List<MotorcycleResponse> getAllMotorcycles(Long userId, MotorcycleFilters filters){
+    public Page<MotorcycleResponse> getAllMotorcycles(String email, MotorcycleFilters filters){
         //checking if the user exists
-        UsersEntity user =userRepository.findById(userId).orElseThrow(()->new UserNotFoundException());
+        //checking by email that we get from jwt token
+        UsersEntity user =userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         //page size of motorcycles
         int pageSize=filters.pageSize()!=null ? filters.pageSize() : 3;
         //current page
         int currentPage=filters.currentPage()!=null? filters.currentPage() : 0;
         //logic for handler
-        if (pageSize<0 || pageSize>20){
+        if (pageSize<=0 || pageSize>20){
             throw new InvalidPageSize(pageSize);
         }
         //creating paging
         Pageable pageable=Pageable.ofSize(pageSize).withPage(currentPage);
         //getting entities from db by repository interface
-        List<MotorcycleEntity> entityList=motorcycleRepository.searchAllByFilters(userId, filters.motorcycleType(), filters.mark(), pageable);
-        return entityList.stream().map(motorcycleMapper::toResponse).toList();
+        Page<MotorcycleEntity> entityList=motorcycleRepository.searchAllByFilters(user.getId(), filters.motorcycleType(), filters.mark(), pageable);
+        return entityList.map(motorcycleMapper::toResponse);
     }
     //getting one bike id
-    public MotorcycleResponse getMotocycleById(Long userId, Long id){
+    public MotorcycleResponse getMotocycleById(String email, Long id){
 
         //checking if the user exists
-        UsersEntity user =userRepository.findById(userId).orElseThrow(()->new UserNotFoundException());
+        UsersEntity user =userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         //calling repository
-        MotorcycleEntity motorcycleEntity=motorcycleRepository.findByIdAndUsersEntityId(id, userId).orElseThrow(()-> new MotorcycleNotFoundException(id));
+        MotorcycleEntity motorcycleEntity=motorcycleRepository.findByIdAndUsersEntityId(id, user.getId()).orElseThrow(()-> new MotorcycleNotFoundException(id));
         return motorcycleMapper.toResponse(motorcycleEntity);
     }
     //creating a bike
     public MotorcycleResponse postMotorcycle(Long userId , MotorcycleRequest motorcycle){
         //error checking
-        if (motorcycle.year()> LocalDateTime.now().getYear()){
-            throw new InvalidYear(motorcycle.year());
-        }
-        UsersEntity user =userRepository.findById(userId).orElseThrow(()->new UserNotFoundException());
+        validateYear(motorcycle.year());
+
+        UsersEntity user =userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //to entity
         MotorcycleEntity toEntity=motorcycleMapper.toEntity(motorcycle, user);
         //saving
@@ -75,10 +76,9 @@ public class MotorcycleService {
     //editing a bike
     public MotorcycleResponse editMotorcycle (Long userId,Long id, MotorcycleRequest motorcycle){
         //error checking
-        if (motorcycle.year()> LocalDateTime.now().getYear()){
-            throw new InvalidYear(motorcycle.year());
-        }
-        UsersEntity user =userRepository.findById(userId).orElseThrow(()->new UserNotFoundException());
+        validateYear(motorcycle.year());
+
+        UsersEntity user =userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         //searching for a bike in user
         MotorcycleEntity motorcycleEntity=motorcycleRepository.findByIdAndUsersEntityId(id, userId).orElseThrow(()->new MotorcycleNotFoundException(id));
         //to entity
@@ -89,11 +89,14 @@ public class MotorcycleService {
         return motorcycleMapper.toResponse(motorcycleToSave);
     };
 
-    public void deleteMotocycle(Long userId, Long id) {
+    public void deleteMotorcycle(Long userId, Long id) {
         //finding bike
         MotorcycleEntity motorcycleEntity=motorcycleRepository.findByIdAndUsersEntityId(id, userId).orElseThrow(()->new MotorcycleNotFoundException(id));
         motorcycleRepository.delete(motorcycleEntity);
     }
-
-
+    private void validateYear(int year){
+        if (year> LocalDateTime.now().getYear()){
+            throw new InvalidYear(year);
+        }
+    }
 }

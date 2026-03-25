@@ -2,14 +2,11 @@ package Garage.Motorcycle.services;
 
 import Garage.Motorcycle.UserMapper;
 import Garage.Motorcycle.customExeptions.EmailExists;
-import Garage.Motorcycle.customExeptions.MotorcycleNotFoundException;
 import Garage.Motorcycle.customExeptions.UserNotFoundException;
 import Garage.Motorcycle.customExeptions.WrongPassword;
-import Garage.Motorcycle.db.MotorcycleEntity;
 import Garage.Motorcycle.db.UserRepository;
 import Garage.Motorcycle.db.UsersEntity;
 import Garage.Motorcycle.userClass.LoginRequest;
-import Garage.Motorcycle.userClass.User;
 import Garage.Motorcycle.userClass.UserRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;

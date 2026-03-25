@@ -3,6 +3,7 @@ package Garage.Motorcycle.services;
 import Garage.Motorcycle.customExeptions.UserNotFoundException;
 import Garage.Motorcycle.db.UserRepository;
 import Garage.Motorcycle.db.UsersEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                List.of()
+                List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))
         );
     }
 }

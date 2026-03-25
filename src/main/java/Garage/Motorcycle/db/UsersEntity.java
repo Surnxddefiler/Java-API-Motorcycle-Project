@@ -66,6 +66,7 @@ public class UsersEntity {
     }
 
     public  List<MotorcycleEntity> getMotorcycles(){return motorcycles;}
+    public UserRole getUserRole(){return userRole;}
     //setter
 
     public void setId(Long id) {

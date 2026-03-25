@@ -1,6 +1,7 @@
 package Garage.Motorcycle.db;
 
 import Garage.Motorcycle.MotocycleClass.MotorcycleType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,5 @@ public interface MotorcycleRepository extends JpaRepository<MotorcycleEntity, Lo
     AND (:mark IS NULL OR m.mark = :mark)
     AND (:userId IS NULL OR m.usersEntity.id = :userId)
 """)
-    public List<MotorcycleEntity> searchAllByFilters(@Param("userId") Long userId,@Param("motorcycleType")MotorcycleType motorcycleType,@Param("mark")String mark, Pageable pageable);
+    public Page<MotorcycleEntity> searchAllByFilters(@Param("userId") Long userId, @Param("motorcycleType")MotorcycleType motorcycleType, @Param("mark")String mark, Pageable pageable);
 }

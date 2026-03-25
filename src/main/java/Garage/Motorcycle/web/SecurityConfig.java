@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) //disabling csrf
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()//allowing all auth endpoints without authentication
+                        .requestMatchers("/admin/**").hasRole("ADMIN")//allowing admins for post requests
                         .anyRequest().authenticated() //everything else will be with token access
 
                 ).sessionManagement(session->session //allowing spring to know that we are using jwt
