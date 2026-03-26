@@ -9,15 +9,13 @@ import Garage.Motorcycle.serviceRecordClass.ServiceRecord;
 import Garage.Motorcycle.serviceRecordClass.ServiceRecordFilters;
 import Garage.Motorcycle.serviceRecordClass.ServiceRecordType;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ServiceRecordService {
@@ -35,20 +33,20 @@ public class ServiceRecordService {
     }
 
     //getting all records
-    public List<ServiceRecord> allRecords(Long userId, Long motorcycleId, ServiceRecordFilters serviceRecordFilters) {
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
-        motorcycleRepository.findByIdAndUsersEntityId(motorcycleId, userId).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
+    public Page<ServiceRecord> allRecords(String email, Long motorcycleId, ServiceRecordFilters serviceRecordFilters) {
+        userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        motorcycleRepository.findByIdAndUsersEntityEmail(motorcycleId, email).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
 
 
         //creating pageable
         int pageSize = serviceRecordFilters.pageSize() != null ? serviceRecordFilters.pageSize() : 3;
         int currentPage = serviceRecordFilters.currentPage() != null ? serviceRecordFilters.currentPage() : 0;
-        if (pageSize < 0 || pageSize > 20) {
+        if (pageSize <= 0 || pageSize > 20) {
             throw new InvalidPageSize(pageSize);
         }
         Pageable pageable = Pageable.ofSize(pageSize).withPage(currentPage);
-        List<ServiceRecordEntity> serviceRecordList = serviceRecordRepository.searchAllByFilters(motorcycleId, serviceRecordFilters.serviceRecordType(), pageable);
-        return serviceRecordList.stream().map(serviceRecordMapper::reTransform).toList();
+        Page<ServiceRecordEntity> serviceRecordList = serviceRecordRepository.searchAllByFilters(motorcycleId, serviceRecordFilters.serviceRecordType(), pageable);
+        return serviceRecordList.map(serviceRecordMapper::reTransform);
     }
 
     ;
@@ -74,17 +72,17 @@ public class ServiceRecordService {
     }
 
     //checking what needs to be maintained asap
-    public List<NeededMaintenance> maintenanceCheck(Long motorcycleId, Long userId) {
+    public List<NeededMaintenance> maintenanceCheck(String email, Long motorcycleId) {
         List<NeededMaintenance> maintainList = new ArrayList<>();
         //checking motorcycle info
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
-        MotorcycleEntity motorcycleEntity = motorcycleRepository.findByIdAndUsersEntityId(motorcycleId, userId).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
+        userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        MotorcycleEntity motorcycleEntity = motorcycleRepository.findByIdAndUsersEntityEmail(motorcycleId, email).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
 
         //looping all types of maintenance
         for (ServiceRecordType type : ServiceRecordType.values()) {
 //            finding last recorded maintenance
             ServiceRecordEntity foundMaintenance = serviceRecordRepository.findFirstByMotorcycleEntityIdAndServiceRecordTypeOrderByServiceTimeDesc(motorcycleId, type).orElse(null);
-            System.out.print(foundMaintenance);
+            System.out.println("type:"+type+"found maintenance"+foundMaintenance);
 
             //mileage difference for maintenance logic
 
@@ -120,11 +118,13 @@ public class ServiceRecordService {
                     else {
                         maintainList.add(new NeededMaintenance(ServiceRecordType.CHAIN, null, 0));
                     }
+                    break;
                     //brakes logic
                 case BRAKES:
                     if (foundMaintenance!=null){
                         int mileageDifference = motorcycleEntity.getMileage() - foundMaintenance.getMileage();
                         if (mileageDifference>7000){
+                            System.out.println("eblan: "+foundMaintenance.getComment()+ " type: " + foundMaintenance.getServiceRecordType() + " current needed type: " +type);
                             maintainList.add(new NeededMaintenance(ServiceRecordType.BRAKES, foundMaintenance.getServiceTime(), mileageDifference));
                         }
                     }

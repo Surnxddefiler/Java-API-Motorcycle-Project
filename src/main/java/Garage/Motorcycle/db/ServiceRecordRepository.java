@@ -1,6 +1,7 @@
 package Garage.Motorcycle.db;
 
 import Garage.Motorcycle.serviceRecordClass.ServiceRecordType;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +28,5 @@ SELECT m FROM ServiceRecordEntity m
         (:serviceRecordType IS NULL OR m.serviceRecordType = :serviceRecordType)
     AND (m.motorcycleEntity.id = :motorcycleId)
 """)
-    public List<ServiceRecordEntity> searchAllByFilters(@Param("motorcycleId") Long motorcycleId, @Param("serviceRecordType")ServiceRecordType serviceRecordType, Pageable pageable);
+    public Page<ServiceRecordEntity> searchAllByFilters(@Param("motorcycleId") Long motorcycleId, @Param("serviceRecordType")ServiceRecordType serviceRecordType, Pageable pageable);
 }

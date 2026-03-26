@@ -19,8 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/user/{userId}/motorcycles")
-//allowing only admins to post motorcycle
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")//allowing only admins to post motorcycle
 public class AdminMotorcycleController {
     //initializing logger
     private static final Logger log= LoggerFactory.getLogger(AdminMotorcycleController.class);

@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 //we made also
 @Repository
 public interface MotorcycleRepository extends JpaRepository<MotorcycleEntity, Long> {
-
+//for getting motorcycle by users Email
+    Optional<MotorcycleEntity> findByIdAndUsersEntityEmail(Long id, String email);
     //for getting motorcycle by user
     Optional<MotorcycleEntity> findByIdAndUsersEntityId(Long id, Long userId);
 
