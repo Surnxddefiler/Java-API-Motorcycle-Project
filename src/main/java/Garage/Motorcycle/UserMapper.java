@@ -7,6 +7,7 @@ import Garage.Motorcycle.db.MotorcycleEntity;
 import Garage.Motorcycle.db.UsersEntity;
 import Garage.Motorcycle.userClass.User;
 import Garage.Motorcycle.userClass.UserRequest;
+import Garage.Motorcycle.userClass.UserResponse;
 import Garage.Motorcycle.userClass.UserRole;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,10 @@ public class UserMapper {
 //        motorcycle will be empty for now, you can add them after creating an User
 //        password will be encoding in service
         return new UsersEntity(null, user.email(), null, null, null, UserRole.ROLE_USER);
+    }
+//    userResponse
+    public UserResponse toResponse(UsersEntity user){
+        return new UserResponse(user.getId(),user.getEmail());
     }
 
 }
