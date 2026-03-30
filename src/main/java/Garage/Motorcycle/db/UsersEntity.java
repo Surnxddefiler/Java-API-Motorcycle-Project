@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 //creating table
 @Table(name="users")
@@ -31,6 +32,19 @@ public class UsersEntity {
             orphanRemoval = true
     )
     private List<MotorcycleEntity> motorcycles = new ArrayList<>();
+
+    //checking account mail verification
+    @Column(name = "account_verified")
+    private boolean accountVerified;
+
+    //reciveing token itself
+    @OneToMany(mappedBy = "usersEntity",
+    fetch=FetchType.LAZY,
+    cascade = CascadeType.ALL,//deleting everything if user was deleted
+            orphanRemoval = true
+
+    )
+    Set<SecureTokenEntity> tokens;
 
     //password encoder
 //    public PasswordEncoder passwordEncoder(){
