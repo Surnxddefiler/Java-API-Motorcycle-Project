@@ -23,7 +23,7 @@ public class UserMapper {
 //        toEntity.setCreationDate(LocalDateTime.now());
 //        motorcycle will be empty for now, you can add them after creating an User
 //        password will be encoding in service
-        return new UsersEntity(null, user.email(), null, null, null, UserRole.ROLE_USER);
+        return new UsersEntity(null, user.email(), null, null, null, UserRole.ROLE_USER, false);
     }
 //    userResponse
     public UserResponse toResponse(UsersEntity user){

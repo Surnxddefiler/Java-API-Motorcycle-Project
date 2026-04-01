@@ -54,13 +54,14 @@ public class UsersEntity {
     public UsersEntity(){
 
     }
-    public UsersEntity(Long id, String email, String password, LocalDateTime creationDate, List<MotorcycleEntity> motorcycles, UserRole userRole){
+    public UsersEntity(Long id, String email, String password, LocalDateTime creationDate, List<MotorcycleEntity> motorcycles, UserRole userRole, boolean accountVerified){
         this.id=id;
         this.email=email;
         this.password=password;
         this.creationDate=creationDate;
         this.motorcycles=motorcycles;
         this.userRole=userRole;
+        this.accountVerified=accountVerified;
     }
     //getters for retransforming
     public Long getId() {
@@ -90,4 +91,5 @@ public class UsersEntity {
         this.creationDate=localDateTime;
     }
     public void setPassword(String password){this.password=password;}
+    public void setAccountVerified(boolean accountVerified) {this.accountVerified = accountVerified;}
 }

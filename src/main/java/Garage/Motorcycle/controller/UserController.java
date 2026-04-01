@@ -28,7 +28,12 @@ public class UserController {
         log.info("creating user with email: "+ user.email());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.addUser(user));
     }
-    //login user
+    //login user and getting user token
+    @GetMapping("/verify")
+    private ResponseEntity<String> verifyUser(@RequestParam String token){
+        log.info("verify user");
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.verifyUser(token));
+    }
     @PostMapping("/login")
     public ResponseEntity<String> logUser(@RequestBody @Valid LoginRequest login){
         log.info("Trying to log: "+ login.email());

@@ -61,4 +61,15 @@ public class SecureTokenEntity {
         this.id = id;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setExpiredAt(LocalDateTime expiredAt) {
+        this.expiredAt = expiredAt;
+    }
+
+    public void setUsersEntity(UsersEntity usersEntity) {
+        this.usersEntity = usersEntity;
+    }
 }

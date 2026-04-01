@@ -19,8 +19,33 @@ public abstract class AbstractEmailContext {
         this.context=new HashMap<>();
     }
     //overiding this method in AccountVerification file
-    public void init(UsersEntity usersEntity){
+    public void init(UsersEntity usersEntity, String fromEmail){
 
+    }
+
+    //getter
+    public String getTo() {
+        return to;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTemplateLocation() {
+        return templateLocation;
+    }
+
+    public Map<String, Object> getContext() {
+        return context;
     }
 
     public Object put(String key, Object value){

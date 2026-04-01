@@ -1,6 +1,7 @@
 package Garage.Motorcycle.mail;
 
 import Garage.Motorcycle.db.UsersEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
@@ -8,12 +9,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AccountVerificationContext extends AbstractEmailContext{
 
     private String token;
-
     @Override
-    public void init(UsersEntity usersEntity) {
-        setTemplateLocation("mail/VerificationMail");
+    public void init(UsersEntity usersEntity, String fromEmail) {
+        setTemplateLocation("mailing/email-verification.html");
         setSubject("Account verification");
         setTo(usersEntity.getEmail());
+        System.out.println("FROM EMAIL: " + fromEmail);
+        setFrom(fromEmail);
     }
 
     //setting the token
@@ -31,7 +33,8 @@ public class AccountVerificationContext extends AbstractEmailContext{
                 fromUriString(baseUrl)//getting base url
                 .path("/auth/verify")//endpoint that will work for verify
                 .queryParam("token", token).toUriString();//passing token + converting to uri
-        //putting to context
+        //putting to context (variable should be the same as in template)
         put("AuthorizationUrl", url);
+
     }
 }
