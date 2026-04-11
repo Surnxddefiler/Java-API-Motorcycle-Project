@@ -1,9 +1,6 @@
 package Garage.Motorcycle.controller;
 
-import Garage.Motorcycle.MotocycleClass.Motorcycle;
-import Garage.Motorcycle.MotocycleClass.MotorcycleRequest;
-import Garage.Motorcycle.MotocycleClass.MotorcycleResponse;
-import Garage.Motorcycle.MotocycleClass.MotorcycleType;
+import Garage.Motorcycle.MotocycleClass.*;
 import Garage.Motorcycle.domain.MotorcycleFilters;
 import Garage.Motorcycle.services.MotorcycleService;
 import jakarta.validation.Valid;
@@ -37,11 +34,15 @@ public class MotorcycleController {
             @RequestParam(name="motorcycleType", required = false) MotorcycleType motorcycleType,
             @RequestParam(name="mark", required = false) String mark,
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
-            @RequestParam(name = "currentPage", required = false) Integer currentPage
-
-    ){
+            @RequestParam(name = "currentPage", required = false) Integer currentPage,
+            @RequestParam(name="minYear", required = false) Integer minYear, //minimal year
+            @RequestParam(name="maxYear", required = false) Integer maxYear,//max year
+            @RequestParam(name = "minCc", required = false) Integer minCc, //min cc
+            @RequestParam(name = "maxCc", required = false) Integer maxCc, //max cc
+            @RequestParam(name="sort", required = false) MotorcycleOrderBy motorcycleOrderBy //order by
+            ){
         log.info("Getting Motorcycles with mark: "+mark+ " and type: "+motorcycleType);
-        return this.motorcycleService.getAllMotorcycles(userDetails.getUsername(), new MotorcycleFilters(motorcycleType, mark, pageSize, currentPage));
+        return this.motorcycleService.getAllMotorcycles(userDetails.getUsername(), new MotorcycleFilters(motorcycleType, mark, pageSize, currentPage, minYear, maxYear, minCc,maxCc, motorcycleOrderBy));
     }
     @GetMapping("/{id}")
     public MotorcycleResponse getMotorcycleById(

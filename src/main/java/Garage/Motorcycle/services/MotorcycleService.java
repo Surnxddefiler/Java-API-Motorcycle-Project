@@ -14,7 +14,9 @@ import Garage.Motorcycle.db.UserRepository;
 import Garage.Motorcycle.db.UsersEntity;
 import Garage.Motorcycle.domain.MotorcycleFilters;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,10 +48,16 @@ public class MotorcycleService {
         if (pageSize<=0 || pageSize>20){
             throw new InvalidPageSize(pageSize);
         }
+
+        //sort Logic
+        Sort sort=Sort.unsorted();
+        if (filters.motorcycleOrderBy()!=null){
+            sort=Sort.by(filters.motorcycleOrderBy().getField());
+        }
         //creating paging
-        Pageable pageable=Pageable.ofSize(pageSize).withPage(currentPage);
+        Pageable pageable= PageRequest.of(currentPage,pageSize,sort);
         //getting entities from db by repository interface
-        Page<MotorcycleEntity> entityList=motorcycleRepository.searchAllByFilters(user.getId(), filters.motorcycleType(), filters.mark(), pageable);
+        Page<MotorcycleEntity> entityList=motorcycleRepository.searchAllByFilters(user.getId(), filters.motorcycleType(), filters.mark(), pageable, filters.minYear(), filters.maxYear(), filters.minCc(), filters.maxCc());
         return entityList.map(motorcycleMapper::toResponse);
     }
     //getting one bike id

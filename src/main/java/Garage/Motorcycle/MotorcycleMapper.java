@@ -20,6 +20,6 @@ public class MotorcycleMapper {
     }
     //for response without user
     public MotorcycleResponse toResponse(MotorcycleEntity motorcycleEntity) {
-        return new MotorcycleResponse(motorcycleEntity.getId(), motorcycleEntity.getModel(), motorcycleEntity.getMark(), motorcycleEntity.getYear(), motorcycleEntity.getMileage(), motorcycleEntity.getEngineCc(), motorcycleEntity.getMotorcycleType());
+        return new MotorcycleResponse(motorcycleEntity.getId(), motorcycleEntity.getMark(), motorcycleEntity.getModel(), motorcycleEntity.getYear(), motorcycleEntity.getMileage(), motorcycleEntity.getEngineCc(), motorcycleEntity.getMotorcycleType());
     }
 }

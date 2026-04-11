@@ -1,5 +1,6 @@
 package Garage.Motorcycle.db;
 
+import Garage.Motorcycle.MotocycleClass.MotorcycleOrderBy;
 import Garage.Motorcycle.MotocycleClass.MotorcycleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,10 @@ public interface MotorcycleRepository extends JpaRepository<MotorcycleEntity, Lo
         (:motorcycleType IS NULL OR m.motorcycleType = :motorcycleType)
     AND (:mark IS NULL OR m.mark = :mark)
     AND (:userId IS NULL OR m.usersEntity.id = :userId)
+AND (:minYear IS NULL OR m.year >= :minYear)
+AND (:maxYear IS NULL OR m.year <= :maxYear)
+AND (:minCc IS NULL OR m.engineCc >= :minCc)
+AND (:maxCc IS NULL OR m.engineCc <= :maxCc)
 """)
-    public Page<MotorcycleEntity> searchAllByFilters(@Param("userId") Long userId, @Param("motorcycleType")MotorcycleType motorcycleType, @Param("mark")String mark, Pageable pageable);
+    public Page<MotorcycleEntity> searchAllByFilters(@Param("userId") Long userId, @Param("motorcycleType")MotorcycleType motorcycleType, @Param("mark")String mark, Pageable pageable, @Param("minYear") Integer minYear, @Param("maxYear") Integer maxYear, @Param("minCc") Integer minCc, @Param("maxCc") Integer maxCc);
 }
