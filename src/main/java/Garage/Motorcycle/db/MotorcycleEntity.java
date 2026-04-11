@@ -6,7 +6,13 @@ import jakarta.persistence.*;
 import java.util.List;
 
 //creating table
-@Table(name="Motorcycle")
+@Table(
+        name = "motorcycle",
+        indexes = {
+                @Index(name = "idx_motorcycle_main", columnList = "user_id, motorcycle_type, engine_cc, year"),
+                @Index(name = "idx_motorcycle_user_mark", columnList = "user_id, mark")
+        }
+)
 @Entity()
 public class MotorcycleEntity {
     @Id
@@ -30,13 +36,6 @@ public class MotorcycleEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UsersEntity usersEntity;
-//    //adding record lists
-//    @OneToMany(
-//            mappedBy = "MotorcycleEntity",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<ServiceRecordEntity> recordList;
     public MotorcycleEntity(){
 
     }

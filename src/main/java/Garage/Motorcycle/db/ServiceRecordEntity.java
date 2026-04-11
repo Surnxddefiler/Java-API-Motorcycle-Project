@@ -5,7 +5,12 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Table(name = "service_record")
+@Table(
+        name = "service_record",
+        indexes = {
+                @Index(name = "idx_service_record_main", columnList = "motorcycle_id, service_record_type, service_time DESC")
+        }
+)
 @Entity()
 public class ServiceRecordEntity {
     @Id
