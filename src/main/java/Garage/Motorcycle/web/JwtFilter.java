@@ -1,5 +1,8 @@
 package Garage.Motorcycle.web;
 
+import Garage.Motorcycle.customExeptions.AccountNotVerifiedException;
+import Garage.Motorcycle.db.UserRepository;
+import Garage.Motorcycle.db.UsersEntity;
 import Garage.Motorcycle.services.JwtService;
 import Garage.Motorcycle.services.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
@@ -51,6 +54,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         //check if if email is not null and checking if user is not authenticated
         if (email!=null && SecurityContextHolder.getContext().getAuthentication()==null){
+
+            //getting user for verification check
+            UsersEntity user=myUserDetailsService.findByEmail(email);
+            if (!user.isAccountVerified()){
+                throw new AccountNotVerifiedException(email);
+            }
 
             //finding user
             UserDetails userDetails= myUserDetailsService.loadUserByUsername(email);

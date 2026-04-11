@@ -30,4 +30,8 @@ public class MyUserDetailsService implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority(user.getUserRole().toString()))
         );
     }
+    //crating function for verification check
+    public UsersEntity findByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    }
 }

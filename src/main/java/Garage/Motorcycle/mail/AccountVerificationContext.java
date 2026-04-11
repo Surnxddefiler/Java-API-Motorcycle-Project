@@ -11,10 +11,9 @@ public class AccountVerificationContext extends AbstractEmailContext{
     private String token;
     @Override
     public void init(UsersEntity usersEntity, String fromEmail) {
-        setTemplateLocation("mailing/email-verification.html");
+        setTemplateLocation("mailing/email-verification");
         setSubject("Account verification");
         setTo(usersEntity.getEmail());
-        System.out.println("FROM EMAIL: " + fromEmail);
         setFrom(fromEmail);
     }
 

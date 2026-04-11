@@ -40,4 +40,8 @@ public class SecureTokenService {
     public SecureTokenEntity verifyToken(String token){
         return secureTokenRepository.findByToken(token);
     };
+
+    public void deleteToken(String token) {
+        secureTokenRepository.removeByToken(token);
+    }
 }

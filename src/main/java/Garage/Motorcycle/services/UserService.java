@@ -11,6 +11,7 @@ import Garage.Motorcycle.userClass.LoginRequest;
 import Garage.Motorcycle.userClass.UserRequest;
 import Garage.Motorcycle.userClass.UserResponse;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 public class UserService {
 
     //base url for senidng email
-    @Value("@{site.base.url.https}")
+    @Value("${site.base.url.https}")
     private String baseUrl;
 
     private final UserRepository userRepository;
@@ -79,9 +80,10 @@ public class UserService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        return "User created successfully";
+        return "please verify email";
     }
 
+    @Transactional //making it transactional so we can make actions with token and user
     public String verifyUser(String token) {
         //getting token from db
         SecureTokenEntity secureToken=secureTokenService.verifyToken(token);
@@ -97,8 +99,10 @@ public class UserService {
         UsersEntity usersEntity=secureToken.getUsersEntity();
         usersEntity.setAccountVerified(true);
         userRepository.save(usersEntity);
+        //deleting used token
+        secureTokenService.deleteToken(secureToken.getToken());
 
-        return "success verification";
+        return "verification done!";
     }
 //    login logic
     public  String loginUser(LoginRequest loginRequest){
@@ -106,8 +110,13 @@ public class UserService {
         if (!passwordEncoder.matches(loginRequest.password(), users.getPassword())){
             throw new WrongPassword();
         }
+        //checking if account is verified
+        if (!users.isAccountVerified()){
+            throw new AccountNotVerifiedException(loginRequest.email());
+        }
         return jwtService.generateToken(loginRequest.email());
-                    }
+
+    }
     public String deleteUser(Long userId){
         UsersEntity user=userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);

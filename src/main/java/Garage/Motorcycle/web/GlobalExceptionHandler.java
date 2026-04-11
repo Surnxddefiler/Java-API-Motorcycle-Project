@@ -107,4 +107,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-}
+    // email token expired
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> tokenExpiredException(Exception e){
+        log.error("token expired");
+        ErrorResponse response=new ErrorResponse("email token expired", e.getMessage(), LocalDateTime.now());
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    //invalid mileage (service record)
+    @ExceptionHandler(InvalidMileage.class)
+    public ResponseEntity<ErrorResponse> invalidMileageException(Exception e){
+        log.error("invalid mileage typed");
+        ErrorResponse response=new ErrorResponse("invalid Mileage", e.getMessage(), LocalDateTime.now());
+        return ResponseEntity.badRequest().body(response);
+    }
+    @ExceptionHandler(AccountNotVerifiedException.class)
+    public ResponseEntity<ErrorResponse> accountNotVerifiedException(Exception e){
+      log.error("Email is not verified");
+      ErrorResponse response=new ErrorResponse("Account is not verified", e.getMessage(), LocalDateTime.now());
+      return ResponseEntity.badRequest().body(response);
+    };
+    }

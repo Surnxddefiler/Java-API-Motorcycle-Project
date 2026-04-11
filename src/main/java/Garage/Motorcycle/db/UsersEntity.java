@@ -82,6 +82,9 @@ public class UsersEntity {
 
     public  List<MotorcycleEntity> getMotorcycles(){return motorcycles;}
     public UserRole getUserRole(){return userRole;}
+    public boolean isAccountVerified() {
+        return accountVerified;
+    }
     //setter
 
     public void setId(Long id) {
