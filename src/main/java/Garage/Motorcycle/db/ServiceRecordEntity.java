@@ -26,6 +26,8 @@ public class ServiceRecordEntity {
     private int mileage;
     @Column(name = "comment")
     private String comment;
+    @Column(name = "price")
+    private double price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "motorcycle_id", nullable = false)// firstly this field was just called id, but for better understanding I made it motorcycle_id
     private MotorcycleEntity motorcycleEntity;
@@ -33,13 +35,14 @@ public class ServiceRecordEntity {
     public ServiceRecordEntity(){
 
     };
-    public ServiceRecordEntity(Long serviceId, LocalDateTime serviceTime, ServiceRecordType serviceRecordType, int mileage, String comment, MotorcycleEntity motorcycleEntity){
+    public ServiceRecordEntity(Long serviceId, LocalDateTime serviceTime, ServiceRecordType serviceRecordType, int mileage, String comment, MotorcycleEntity motorcycleEntity, double price){
         this.serviceId=serviceId;
         this.serviceTime=serviceTime;
         this.serviceRecordType=serviceRecordType;
         this.mileage=mileage;
         this.comment=comment;
         this.motorcycleEntity=motorcycleEntity;
+        this.price=price;
     }
 
     public Long getId() {
@@ -56,6 +59,10 @@ public class ServiceRecordEntity {
 
     public int getMileage() {
         return mileage;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public String getComment() {

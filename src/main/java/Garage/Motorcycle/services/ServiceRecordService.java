@@ -4,10 +4,7 @@ import Garage.Motorcycle.MotocycleClass.MotorcycleType;
 import Garage.Motorcycle.ServiceRecordMapper;
 import Garage.Motorcycle.customExeptions.*;
 import Garage.Motorcycle.db.*;
-import Garage.Motorcycle.serviceRecordClass.NeededMaintenance;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecord;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecordFilters;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecordType;
+import Garage.Motorcycle.serviceRecordClass.*;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -161,5 +158,14 @@ public class ServiceRecordService {
         ServiceRecordEntity serviceRecordEntity=serviceRecordRepository.findByServiceIdAndMotorcycleEntityId(serviceId, motorcycleId).orElseThrow(()->new ServiceRecordNotFoundException(serviceId));
         serviceRecordRepository.delete(serviceRecordEntity);
         return "Service Deleted Successfully";
+    }
+
+    //getting analytics
+    public ServiceRecordAnalytics getAnalytics(String email, Long motorcycleId, LocalDateTime startDate, LocalDateTime endDate) {
+
+        userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        motorcycleRepository.findByIdAndUsersEntityEmail(motorcycleId, email).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
+
+        return serviceRecordRepository.getAnalytics(motorcycleId, startDate, endDate);
     }
 }

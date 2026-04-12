@@ -1,9 +1,6 @@
 package Garage.Motorcycle.controller;
 
-import Garage.Motorcycle.serviceRecordClass.NeededMaintenance;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecord;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecordFilters;
-import Garage.Motorcycle.serviceRecordClass.ServiceRecordType;
+import Garage.Motorcycle.serviceRecordClass.*;
 import Garage.Motorcycle.services.ServiceRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -46,4 +44,13 @@ public class ServiceRecordController {
         log.info("getting needed maintenance");
         return serviceRecordService.maintenanceCheck(userDetails.getUsername(), motorcycleId);
     };
+    @GetMapping("/analytics")
+    public ServiceRecordAnalytics analytics(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("motorcycleId") Long motorcycleId,
+            @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
+            @RequestParam(name = "endDate", required = false) LocalDateTime endDate
+            ){
+        return serviceRecordService.getAnalytics(userDetails.getUsername(), motorcycleId, startDate, endDate);
+    }
 }

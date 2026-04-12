@@ -15,6 +15,8 @@ public record ServiceRecord(
         @NotNull
         int mileage,
         @NotNull
-        String comment
+        String comment,
+        @NotNull
+        double price
 ) {
 }
