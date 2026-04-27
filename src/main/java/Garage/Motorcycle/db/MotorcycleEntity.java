@@ -3,7 +3,6 @@ package Garage.Motorcycle.db;
 import Garage.Motorcycle.MotocycleClass.MotorcycleType;
 import jakarta.persistence.*;
 
-import java.util.List;
 
 //creating table
 @Table(

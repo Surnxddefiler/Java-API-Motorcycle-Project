@@ -46,10 +46,8 @@ public class ServiceRecordService {
         return serviceRecordList.map(serviceRecordMapper::reTransform);
     }
 
-    ;
-
     public ServiceRecord addRecord(Long userId, Long motorcycleId, @Valid ServiceRecord serviceRecord) {
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         MotorcycleEntity motorcycleEntity = motorcycleRepository.findByIdAndUsersEntityId(motorcycleId, userId).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
 
         //checking mileage error, if everything is good, new mileage will appear
@@ -79,8 +77,6 @@ public class ServiceRecordService {
         for (ServiceRecordType type : ServiceRecordType.values()) {
 //            finding last recorded maintenance
             ServiceRecordEntity foundMaintenance = serviceRecordRepository.findFirstByMotorcycleEntityIdAndServiceRecordTypeOrderByServiceTimeDesc(motorcycleId, type).orElse(null);
-            System.out.println("type:"+type+"found maintenance"+foundMaintenance);
-
             //mileage difference for maintenance logic
 
             //logic of maintenance needed
@@ -106,7 +102,6 @@ public class ServiceRecordService {
                     //chain logic
                 case CHAIN:
                     if (foundMaintenance!=null){
-                        System.out.println("found Maintenance: " + foundMaintenance.getComment());
                         int mileageDifference = motorcycleEntity.getMileage() - foundMaintenance.getMileage();
                         if (mileageDifference>700){
                             maintainList.add(new NeededMaintenance(ServiceRecordType.CHAIN, foundMaintenance.getServiceTime(), mileageDifference));
@@ -121,7 +116,6 @@ public class ServiceRecordService {
                     if (foundMaintenance!=null){
                         int mileageDifference = motorcycleEntity.getMileage() - foundMaintenance.getMileage();
                         if (mileageDifference>7000){
-                            System.out.println("eblan: "+foundMaintenance.getComment()+ " type: " + foundMaintenance.getServiceRecordType() + " current needed type: " +type);
                             maintainList.add(new NeededMaintenance(ServiceRecordType.BRAKES, foundMaintenance.getServiceTime(), mileageDifference));
                         }
                     }
@@ -153,8 +147,8 @@ public class ServiceRecordService {
     }
     //deleting info
     public String deleteServiceRecord(Long userId, Long serviceId, Long motorcycleId){
-        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
-        MotorcycleEntity motorcycleEntity = motorcycleRepository.findByIdAndUsersEntityId(motorcycleId, userId).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        //MotorcycleEntity motorcycleEntity = motorcycleRepository.findByIdAndUsersEntityId(motorcycleId, userId).orElseThrow(() -> new MotorcycleNotFoundException(motorcycleId));
         ServiceRecordEntity serviceRecordEntity=serviceRecordRepository.findByServiceIdAndMotorcycleEntityId(serviceId, motorcycleId).orElseThrow(()->new ServiceRecordNotFoundException(serviceId));
         serviceRecordRepository.delete(serviceRecordEntity);
         return "Service Deleted Successfully";

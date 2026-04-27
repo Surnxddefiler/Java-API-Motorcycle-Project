@@ -19,7 +19,7 @@ public class ServiceRecordController {
     private static final Logger log= LoggerFactory.getLogger(ServiceRecordController.class);
 
     //beans
-    private ServiceRecordService serviceRecordService;
+    private final ServiceRecordService serviceRecordService;
     public ServiceRecordController(ServiceRecordService serviceRecordService){
         this.serviceRecordService=serviceRecordService;
     }
@@ -32,7 +32,7 @@ public class ServiceRecordController {
             @RequestParam(name = "pageSize", required = false) Integer pageSize,
             @RequestParam(name = "currentPage", required = false) Integer currentPage
     ){
-        log.info("getting list of services for motorcycle with id: " + motorcycleId);
+        log.info("getting list of services for motorcycle with id: {}", motorcycleId);
         return serviceRecordService.allRecords(userDetails.getUsername(), motorcycleId, new ServiceRecordFilters(motorcycleRecordType, pageSize, currentPage));
     }
     //endpoint for maintenance warnings
@@ -43,7 +43,7 @@ public class ServiceRecordController {
     ){
         log.info("getting needed maintenance");
         return serviceRecordService.maintenanceCheck(userDetails.getUsername(), motorcycleId);
-    };
+    }
     @GetMapping("/analytics")
     public ServiceRecordAnalytics analytics(
             @AuthenticationPrincipal UserDetails userDetails,

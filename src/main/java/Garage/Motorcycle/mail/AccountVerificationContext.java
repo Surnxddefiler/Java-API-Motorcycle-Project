@@ -1,7 +1,6 @@
 package Garage.Motorcycle.mail;
 
 import Garage.Motorcycle.db.UsersEntity;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
 
 

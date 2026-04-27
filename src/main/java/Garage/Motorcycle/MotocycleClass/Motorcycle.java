@@ -1,8 +1,6 @@
 package Garage.Motorcycle.MotocycleClass;
 
-import Garage.Motorcycle.db.ServiceRecordEntity;
 import Garage.Motorcycle.db.UsersEntity;
-import Garage.Motorcycle.userClass.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Positive;

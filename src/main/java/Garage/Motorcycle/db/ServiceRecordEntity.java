@@ -34,7 +34,7 @@ public class ServiceRecordEntity {
 
     public ServiceRecordEntity(){
 
-    };
+    }
     public ServiceRecordEntity(Long serviceId, LocalDateTime serviceTime, ServiceRecordType serviceRecordType, int mileage, String comment, MotorcycleEntity motorcycleEntity, double price){
         this.serviceId=serviceId;
         this.serviceTime=serviceTime;

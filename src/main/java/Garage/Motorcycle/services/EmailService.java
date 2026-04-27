@@ -41,8 +41,6 @@ public class EmailService{
         mimeMessageHelper.setSubject(abstractEmailContext.getSubject());
         mimeMessageHelper.setText(emailContent, true);
 
-        System.out.println(emailContent);
-
         javaMailSender.send(message);
     }
 }

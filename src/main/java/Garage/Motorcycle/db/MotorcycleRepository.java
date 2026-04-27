@@ -1,6 +1,5 @@
 package Garage.Motorcycle.db;
 
-import Garage.Motorcycle.MotocycleClass.MotorcycleOrderBy;
 import Garage.Motorcycle.MotocycleClass.MotorcycleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

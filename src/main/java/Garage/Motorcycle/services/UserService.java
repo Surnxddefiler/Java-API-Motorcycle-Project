@@ -106,7 +106,7 @@ public class UserService {
     }
 //    login logic
     public  String loginUser(LoginRequest loginRequest){
-        UsersEntity users=userRepository.findByEmail(loginRequest.email()).orElseThrow(()->new UserNotFoundException());
+        UsersEntity users=userRepository.findByEmail(loginRequest.email()).orElseThrow(UserNotFoundException::new);
         if (!passwordEncoder.matches(loginRequest.password(), users.getPassword())){
             throw new WrongPassword();
         }

@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/admin/users/{userId}/motorcycles/{motorcycleId}/service-record")
 @PreAuthorize("hasRole('ADMIN')")
@@ -19,7 +17,7 @@ public class AdminServiceRecordController {
     private static final Logger log= LoggerFactory.getLogger(AdminServiceRecordController.class);
 
     //beans
-    private ServiceRecordService serviceRecordService;
+    private final ServiceRecordService serviceRecordService;
     public AdminServiceRecordController(ServiceRecordService serviceRecordService){
         this.serviceRecordService=serviceRecordService;
     }
@@ -31,7 +29,7 @@ public class AdminServiceRecordController {
             @PathVariable("motorcycleId") Long motorcycleId,
             @RequestBody ServiceRecord serviceRecord
     ){
-        log.info("new service done: " + serviceRecord.serviceRecordType() + " comment: "+serviceRecord.comment());
+        log.info("new service done: {} comment: {}", serviceRecord.serviceRecordType(), serviceRecord.comment());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.serviceRecordService.addRecord(userId, motorcycleId, serviceRecord));
     }
 //    deleting service record
@@ -41,7 +39,7 @@ public class AdminServiceRecordController {
             @PathVariable("motorcycleId") Long motorcycleId,
             @PathVariable("serviceId") Long serviceId
     ){
-        log.info("deleting service record with id: " + serviceId);
+        log.info("deleting service record with id: {}", serviceId);
         return serviceRecordService.deleteServiceRecord(userId, serviceId, motorcycleId);
-    };
+    }
 }

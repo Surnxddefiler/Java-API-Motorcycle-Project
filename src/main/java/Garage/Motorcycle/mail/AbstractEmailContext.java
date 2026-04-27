@@ -4,7 +4,6 @@ import Garage.Motorcycle.db.UsersEntity;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 //template for all emails
 public abstract class AbstractEmailContext {
@@ -13,7 +12,7 @@ public abstract class AbstractEmailContext {
     private String subject;
     private String email;
     private String templateLocation;
-    private Map<String, Object> context;
+    private final Map<String, Object> context;
 
     public AbstractEmailContext(){
         this.context=new HashMap<>();

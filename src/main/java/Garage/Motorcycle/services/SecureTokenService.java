@@ -13,7 +13,7 @@ import java.util.Base64;
 @Service
 public class SecureTokenService {
     //creating token
-    private static BytesKeyGenerator DEFAULT_TOKEN_GENERATOR= KeyGenerators.secureRandom(12);
+    private static final BytesKeyGenerator DEFAULT_TOKEN_GENERATOR= KeyGenerators.secureRandom(12);
     private static int tokenTimeInSeconds=2800;
     //repository adding
     private final SecureTokenRepository secureTokenRepository;
@@ -35,11 +35,11 @@ public class SecureTokenService {
         //saving token
         secureTokenRepository.save(secureTokenEntity);
         return secureTokenEntity;
-    };
+    }
 
     public SecureTokenEntity verifyToken(String token){
         return secureTokenRepository.findByToken(token);
-    };
+    }
 
     public void deleteToken(String token) {
         secureTokenRepository.removeByToken(token);
